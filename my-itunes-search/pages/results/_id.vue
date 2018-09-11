@@ -1,12 +1,21 @@
 <template>
     <div>
         {{ $route.params.id }}
-        {{ $store.state.albums }}
+        {{ albumData }}
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
+    asyncData({ params }) {
+        return axios.get(`https://itunes.apple.com/search?term=${params.id}&entity=album`)
+        .then((response) => {
+            return { albumData: response.data.results }
+        });
+    },
+
     middleware: 'search'
 }
 </script>
